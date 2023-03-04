@@ -1,7 +1,7 @@
 import time
 import turtle
 from turtle import Screen
-from set_up import Set_up,Indicator,Score,Turn
+from set_up import Set_up,Tictacs,Score,Turn
 myscreen=Screen()
 myscreen.tracer(0)
 
@@ -12,22 +12,20 @@ setup.draw_lines()
 
 
 game_on = True
-tom=Indicator()
+tom=Tictacs()
 turn = 0
 score = Score()
 score.update_score(setup.xscor,setup.oscor)
 turn =Turn()
 turn.update_turn(tom.turn)
 while game_on:
-
     turtle.update()
     myscreen.listen()
     myscreen.onscreenclick(tom.click)
     turn.update_turn(tom.turn)
-
+    # checks for wins and if all boxes have been filled resets the game if any is true
     if tom.check_win() or tom.max_plays():
         turtle.update()
-
         if tom.check_win():
             if tom.win == 0:
                 setup.oscor += 1

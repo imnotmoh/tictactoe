@@ -3,6 +3,9 @@ import turtle
 from turtle import Turtle,Screen
 import time
 
+
+
+#  sets up the lines for the tictics
 class Set_up(Turtle):
     def __init__(self):
         self.xscor = 0
@@ -14,6 +17,7 @@ class Set_up(Turtle):
         self.pensize(width=5)
         self.pencolor("White")
     def draw_lines(self):
+        """draws the lines for the game"""
         for i in range(-50, 100, 100):
             self.goto(x=i,y=150)
             self.setheading(270)
@@ -27,24 +31,18 @@ class Set_up(Turtle):
 
 
     def draw(self):
+        """"draws a line"""
         self.pendown()
         self.forward(300)
         self.penup()
 
 
-class Tictaks(Turtle):
-    def __init__(self):
-        super().__init__()
-
-        self.hideturtle()
-        self.pencolor("White")
-        self.pensize(width=5)
 
 
 
 
-
-class Indicator(Turtle):
+# draws the tic tac signs
+class Tictacs(Turtle):
     def __init__(self):
         super().__init__()
         self.win = None
@@ -53,11 +51,12 @@ class Indicator(Turtle):
         self.penup()
         self.goto(y=250,x=0)
         self.write(arg=" TicTacToe", move=False, align="center", font=("Arial", 50, 'normal'))
+        # play cordinates in game
         self.tictakcor = [(-100.0, 100.0), (0.0, 100.0), (100.0, 100.0), (-100.0, 0.0), (-0.0, -0.0), (100.0, -0.0), (-100.0, -100.0), (-0.0, -100.0), (100.0, -100.0)]
+        # every win cordinates
         self.wincor = [self.tictakcor[:3],self.tictakcor[3:6],self.tictakcor[6:],[(-100.0, 100.0), (-100.0, -0.0), (-100.0, -100.0)], [(-0.0, 100.0), (-0.0, -0.0), (0.0, -100.0)],[(100.0, 100.0), (100.0, -0.0), (100.0, -100.0)],[(100.0, 100.0), (0.0, -0.0), (-100.0, -100.0)],[(-100.0, 100.0), (-0.0, -0.0), (100.0, -100.0)]]
         self.corx = []
         self.coro = []
-
         self.hideturtle()
         self.penup()
         self.color("white")
@@ -65,10 +64,13 @@ class Indicator(Turtle):
         self.shapesize(4)
 
     def click(self,x,y):
+        """places the tictacs in  the right position and also checks the whose turn it is"""
+        # checks if the click is not outside the play area
         if 150 > x > -150:
             if 150 > y > -150:
                 self.goto(round(x,-2),round(y,-2))
                 if self.turn % 2 == 0:
+                    # checks if a tic tac is not already in the click cordinates
                     if (self.xcor(),self.ycor()) not in self.coro and (self.xcor(),self.ycor()) not in self.corx:
                         self.coro.append((self.xcor(), self.ycor()))
                         self.o()
@@ -82,6 +84,7 @@ class Indicator(Turtle):
 
 
                 elif self.turn % 2 == 1:
+                    # checks if a tic tac is not already in the click cordinates
                     if (self.xcor(),self.ycor()) not in self.coro and (self.xcor(),self.ycor()) not in self.corx:
                         self.corx.append((self.xcor(),self.ycor()))
                         self.x()
@@ -91,6 +94,7 @@ class Indicator(Turtle):
 
 
     def o(self):
+        # draw o
         self.setheading(0)
         self.goto(self.xcor(),self.ycor()-30)
         self.pendown()
@@ -101,6 +105,7 @@ class Indicator(Turtle):
 
 
     def x(self):
+        # draw x
         self.pendown()
         self.pensize(5)
         self.setheading(60)
@@ -120,9 +125,10 @@ class Indicator(Turtle):
 
 
     def check_win(self):
-
+        """checks if a player has won. returns true if a player has won"""
         for wins in self.wincor:
             wino = 0
+            # checks for matches in a win cordinate
             for cor in wins:
                 for i in self.coro:
                     if i == cor:
@@ -159,7 +165,12 @@ class Indicator(Turtle):
 
 
     def computer_ai(self):
-        pass
+        # for one player mode
+        strategy = random.choice(self.wincor)
+        move = random.choice(strategy)
+        return strategy
+
+
 
     # def blink(self):
     #     self.hideturtle()
@@ -168,9 +179,12 @@ class Indicator(Turtle):
     #     time.sleep(0.5)
 
     def max_plays(self):
+        # checks if all the boxes have been played
         if len(self.coro) + len(self.corx) == 9:
             return True
 
+
+# keeps and display the scores
 class Score(Turtle):
     def __init__(self,):
         super().__init__()
@@ -179,10 +193,9 @@ class Score(Turtle):
         self.penup()
     def update_score(self,xscor,yscor):
         self.clear()
-
-        self.goto(y=200,x=150)
+        self.goto(y=200, x=150)
         self.write(arg=f"X:{xscor}", move=False, align="center", font=("Arial", 30, 'normal'))
-        self.goto(y=200,x=-150)
+        self.goto(y=200, x=-150)
         self.write(arg=f"O:{yscor}", move=False, align="center", font=("Arial", 30, 'normal'))
 
 class Turn(Turtle):
@@ -193,7 +206,7 @@ class Turn(Turtle):
         self.color("White")
     def update_turn(self,turn):
         self.clear()
-        if turn%2 == 0:
+        if turn % 2 == 0:
             self.turnsym = "O"
             print(turn)
         else:
